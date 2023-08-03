@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/constants/colors.dart';
 import 'package:tic_tac_toe/constants/edge_insets.dart';
+import 'package:tic_tac_toe/constants/text_styles.dart';
 
 import '../widgets/game_board.dart';
 
@@ -14,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<String> itemList = ['', '', '', '', '', '', '', '', ''];
+  List<String> itemList = List.generate(9, (index) => '');
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
               padding: AppEdgeInsets.vertical * 2,
               child: Text(
                 'Game',
-                style: TextStyle(fontSize: 32, color: AppColors.secondaryColor),
+                style: TextStyles.titleStyle,
               ),
             ),
             GameBoard(itemList: itemList)

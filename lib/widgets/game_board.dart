@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/constants/edge_insets.dart';
+import 'package:tic_tac_toe/constants/text_styles.dart';
+import 'package:tic_tac_toe/widgets/buttons.dart';
 
 import '../constants/colors.dart';
 
@@ -57,9 +59,7 @@ class _GameBoardState extends State<GameBoard> {
       winner = '';
       gameCount = 0;
 
-      for (var i = 0; i < widget.itemList.length; i++) {
-        widget.itemList[i] = '';
-      }
+      widget.itemList.replaceRange(0, 9, List.generate(9, (index) => ''));
     });
   }
 
@@ -71,38 +71,37 @@ class _GameBoardState extends State<GameBoard> {
           padding: AppEdgeInsets.bottom * 2,
           shrinkWrap: true,
           itemCount: widget.itemList.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, // İki sütunlu bir ızgara
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: widget.itemList.length ~/ 3,
             mainAxisSpacing: 5.0,
             crossAxisSpacing: 5.0,
           ),
           itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-                onTap: () {
-                  if (winner == '') _changePlayer(index);
-                },
-                child: Container(
-                  color: AppColors.primaryColor,
-                  child: Center(
-                      child: Text(
-                    widget.itemList[index],
-                    style: TextStyle(fontSize: 40, color: AppColors.bgColor),
-                  )),
-                ));
+            return _buildBoard(index);
           },
         ),
         Text(
           winner,
-          style: TextStyle(fontSize: 32, color: AppColors.primaryColor),
+          style: TextStyles.titleStyle,
         ),
-        ElevatedButton.icon(
-            onPressed: _resetGame,
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(AppColors.secondaryColor)),
-            icon: const Icon(Icons.restart_alt),
-            label: const Text('New game'))
+        PrimaryButton(
+            onPressed: _resetGame, icon: Icons.restart_alt, text: 'New game')
       ],
     );
+  }
+
+  InkWell _buildBoard(int index) {
+    return InkWell(
+        onTap: () {
+          if (winner.isEmpty) _changePlayer(index);
+        },
+        child: Container(
+          color: AppColors.primaryColor,
+          child: Center(
+              child: Text(
+            widget.itemList[index],
+            style: TextStyles.boardTextStyle,
+          )),
+        ));
   }
 }
